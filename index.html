@@ -30,6 +30,76 @@
 
   <style>
     /* ================================================================
+       HACKED BANNER — fun easter egg
+       ================================================================ */
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-1px, 1px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+    @keyframes scanline {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+    .hacked-banner {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #0a0a0a;
+      border-bottom: 2px solid #ff0000;
+      padding: 12px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #ff2222;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(255,0,0,0.3);
+    }
+    .hacked-banner.show { display: block; animation: glitch 0.3s ease 3; }
+    .hacked-banner .scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 3px;
+      background: rgba(255,0,0,0.15);
+      animation: scanline 2s linear infinite;
+    }
+    .hacked-banner .row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hacked-banner .blink { animation: blink 0.8s step-end infinite; }
+    .hacked-banner .code {
+      background: rgba(255,0,0,0.1);
+      border: 1px solid #ff000033;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 0.75rem;
+    }
+    .hacked-banner .close-btn {
+      background: none;
+      border: 1px solid #ff000066;
+      color: #ff4444;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      padding: 2px 10px;
+      border-radius: 2px;
+      transition: 0.2s;
+    }
+    .hacked-banner .close-btn:hover {
+      background: #ff000022;
+      border-color: #ff0000;
+    }
+
+    /* ================================================================
        CSS CUSTOM PROPERTIES (Theming)
        ================================================================ */
     :root {
@@ -987,6 +1057,22 @@
 <body>
 
   <!-- ================================================================
+       HACKED BANNER — for fun (press H to toggle)
+       ================================================================ -->
+  <div class="hacked-banner" id="hackedBanner">
+    <div class="scanline"></div>
+    <div class="row">
+      <span style="color:#ff0000;font-weight:bold;">⚠</span>
+      <span><strong>SYSTEM COMPROMISED</strong> — <span class="blink">UNAUTHORIZED ACCESS DETECTED</span></span>
+      <span class="code">root@oswald:~$ <span class="blink">▌</span></span>
+      <button class="close-btn" id="hackedClose">[x] close</button>
+    </div>
+    <div class="row" style="margin-top:4px;font-size:0.7rem;color:#ff444488;">
+      <span>192.168.1.42 — port 22 — SSH breach — <span class="blink">active</span></span>
+    </div>
+  </div>
+
+  <!-- ================================================================
        NAVIGATION
        ================================================================ -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
@@ -1588,6 +1674,23 @@
 
       // Initial call
       highlightNav();
+
+      // =============================================================
+      // 7. HACKED BANNER easter egg (press H to toggle)
+      // =============================================================
+      const hackedBanner = document.getElementById('hackedBanner');
+      const hackedClose = document.getElementById('hackedClose');
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'h' || e.key === 'H') {
+          e.preventDefault();
+          hackedBanner.classList.toggle('show');
+        }
+      });
+
+      hackedClose.addEventListener('click', function() {
+        hackedBanner.classList.remove('show');
+      });
 
     })();
   </script>
